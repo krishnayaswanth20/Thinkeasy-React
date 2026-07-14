@@ -3,7 +3,7 @@ import axios from 'axios';
 // Same Flask backend the legacy HTML/JS frontend talked to. Do not change.
 // Configurable via VITE_API_URL for different deploy targets (staging,
 // self-hosted, etc.) — falls back to the known-good production URL.
-export const API_URL = import.meta.env.VITE_API_URL || 'https://thinkeasy-1-0.onrender.com/api';
+export const API_URL = import.meta.env.VITE_API_URL || 'https://thinkeasy-react.onrender.com/api';
 
 const client = axios.create({
   baseURL: API_URL,
