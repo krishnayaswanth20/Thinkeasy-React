@@ -1,0 +1,55 @@
+/* ── TOASTS ─────────────────────────────────────────────────────────── */
+.te-toast-stack {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 9999; display: flex; flex-direction: column-reverse; gap: 10px;
+  align-items: center; pointer-events: none;
+}
+.te-toast {
+  pointer-events: auto; cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-radius: 12px; font-size: 13.5px; font-weight: 600;
+  max-width: 380px; box-shadow: 0 10px 32px rgba(15, 23, 42, .18);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border, #e2e8f0);
+  background: var(--card, #fff); color: var(--text, #1a2744);
+}
+.te-toast i { font-size: 17px; flex-shrink: 0; }
+.te-toast-success { border-color: rgba(16,185,129,.35); }
+.te-toast-success i { color: #10b981; }
+.te-toast-error { border-color: rgba(239,68,68,.35); }
+.te-toast-error i { color: #ef4444; }
+.te-toast-info i { color: #2563eb; }
+
+/* ── REUSABLE SKELETON BLOCKS ──────────────────────────────────────── */
+.te-skel {
+  background: linear-gradient(90deg, rgba(148,163,184,.14) 25%, rgba(148,163,184,.24) 37%, rgba(148,163,184,.14) 63%);
+  background-size: 400% 100%;
+  animation: te-skel-shimmer 1.4s ease infinite;
+  border-radius: 10px;
+}
+@keyframes te-skel-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* ── REUSABLE BUTTONS ───────────────────────────────────────────────── */
+.te-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 13.5px; font-weight: 600; border-radius: 10px; cursor: pointer;
+  border: 1px solid transparent; padding: 10px 18px; transition: all .18s ease;
+  white-space: nowrap;
+}
+.te-btn:disabled { opacity: .55; cursor: not-allowed; }
+.te-btn-primary { background: linear-gradient(135deg, #4f46e5, #2563eb); color: #fff; box-shadow: 0 6px 18px rgba(37,99,235,.28); }
+.te-btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(37,99,235,.36); }
+.te-btn-ghost { background: transparent; border-color: var(--border, #e2e8f0); color: var(--text, #1a2744); }
+.te-btn-ghost:hover:not(:disabled) { background: rgba(148,163,184,.1); }
+.te-btn-danger { background: rgba(239,68,68,.1); color: #ef4444; border-color: rgba(239,68,68,.25); }
+.te-btn-danger:hover:not(:disabled) { background: rgba(239,68,68,.18); }
+.te-btn-sm { padding: 7px 13px; font-size: 12.5px; }
+
+/* ── EMPTY STATE ────────────────────────────────────────────────────── */
+.te-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 48px 20px; color: var(--muted, #64748b); }
+.te-empty i { font-size: 34px; opacity: .5; }
+.te-empty-title { font-weight: 700; font-size: 15px; color: var(--text, #1a2744); }
+.te-empty-sub { font-size: 13px; max-width: 320px; }

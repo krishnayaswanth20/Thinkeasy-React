@@ -1,0 +1,59 @@
+/* ── Toolbar (bookmark / share / print / export) ───────────────────── */
+.detail-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.detail-toolbar-btn {
+  display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--card); color: var(--text);
+  font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s ease;
+}
+.detail-toolbar-btn:hover { border-color: #4f46e5; color: #4f46e5; }
+.detail-toolbar-btn.active { background: linear-gradient(135deg,#4f46e5,#2563eb); color: #fff; border-color: transparent; }
+.detail-toolbar-btn i { font-size: 15px; }
+
+/* ── ROI Calculator ─────────────────────────────────────────────────── */
+.roi-calc-input-row { margin-bottom: 16px; }
+.roi-calc-input-row label { display: block; font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.roi-calc-input-row input {
+  width: 100%; max-width: 280px; padding: 10px 14px; border-radius: 10px;
+  border: 1.5px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; outline: none;
+}
+.roi-calc-input-row input:focus { border-color: #4f46e5; }
+.roi-calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.roi-calc-stat { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.roi-calc-label { display: block; font-size: 11.5px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.roi-calc-value { font-size: 18px; font-weight: 800; color: var(--text); }
+.roi-calc-value--accent { color: #10b981; }
+.roi-calc-note { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* ── Related carousel ───────────────────────────────────────────────── */
+.related-carousel { margin-top: 4px; }
+.related-carousel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 15px; font-weight: 700; color: var(--text); }
+.related-carousel-nav { display: flex; gap: 6px; }
+.related-carousel-nav button {
+  width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg);
+  color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.related-carousel-nav button:hover { color: #4f46e5; border-color: #4f46e5; }
+.related-carousel-track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+.related-carousel-track::-webkit-scrollbar { height: 6px; }
+.related-carousel-card {
+  flex: 0 0 220px; scroll-snap-align: start; padding: 14px 16px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--bg); cursor: pointer; transition: all .15s ease;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.related-carousel-card:hover { border-color: #4f46e5; transform: translateY(-2px); }
+.related-carousel-name { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.related-carousel-meta { font-size: 11.5px; color: var(--muted); }
+.related-carousel-market { font-size: 12.5px; font-weight: 600; color: #2563eb; margin-top: 4px; }
+
+/* ── Print stylesheet — used by both "Print" and "Export PDF"
+   (Export PDF is the browser's native Print → Save as PDF) ──────────── */
+@media print {
+  [data-no-print="true"],
+  .sidebar-nav, .topnav, .breadcrumb, .footer, .fb-fab, .fb-overlay,
+  .te-navbar, .te-footer, .cmp-bar, .auth-modal-overlay {
+    display: none !important;
+  }
+  body { background: #fff !important; }
+  .main-content, .page-wrapper { max-width: 100% !important; }
+  .section-card, .chart-card, .chart-card-full { break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; }
+}

@@ -1,0 +1,23 @@
+# ─────────────────────────────────────────────────────────────────
+# ThinkEasy — Python dependencies
+# Render installs these via:  pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────────
+
+# Web framework
+Flask==3.1.0
+Flask-Cors==5.0.0
+Werkzeug==3.1.3
+gunicorn==23.0.0
+
+# Local development: loads DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME/
+# ADMIN_SECRET_KEY from a backend/.env file if one exists. Harmless no-op
+# in production (Render/Railway set real environment variables instead).
+python-dotenv==1.0.1
+
+# Database
+mysql-connector-python==9.1.0
+
+# Excel import  ← THE MISSING PACKAGES that caused the Render failure
+pandas==2.2.3
+openpyxl==3.1.5
+numpy==1.26.4

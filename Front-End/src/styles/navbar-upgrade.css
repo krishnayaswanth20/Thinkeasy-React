@@ -1,0 +1,74 @@
+/* ── Mega menu trigger + panel ──────────────────────────────────────── */
+.te-nav-explore {
+  display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none;
+  padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+  color: var(--muted); transition: all .15s ease;
+}
+.te-nav-explore:hover, .te-nav-explore.active { color: var(--text); background: var(--bg-alt); }
+
+.te-mega-menu {
+  position: absolute; top: 100%; left: 0; right: 0; margin-top: 1px;
+  background: var(--card); border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 16px 16px; box-shadow: 0 20px 48px rgba(15,23,42,.14);
+  display: flex; gap: 32px; padding: 22px 28px; z-index: 60;
+  backdrop-filter: blur(14px);
+}
+.te-mega-col { display: flex; flex-direction: column; gap: 6px; min-width: 160px; }
+.te-mega-col-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; }
+.te-mega-col a {
+  display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600;
+  color: var(--text); cursor: pointer; padding: 6px 8px; border-radius: 8px; transition: background .15s ease;
+}
+.te-mega-col a:hover { background: var(--bg-alt); }
+.te-mega-col a i { color: #4f46e5; font-size: 15px; }
+.te-mega-subtitle { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--muted); margin-top: 8px; }
+.te-mega-item { font-size: 13px; padding-left: 4px !important; }
+.te-mega-empty { font-size: 12.5px; color: var(--muted); padding: 6px 8px; }
+
+/* ── Floating sticky search bar ─────────────────────────────────────── */
+.te-floating-search {
+  position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 90;
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 20px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--card); color: var(--muted); font-size: 13px; font-weight: 500;
+  cursor: pointer; box-shadow: 0 12px 32px rgba(15,23,42,.14);
+  backdrop-filter: blur(14px); min-width: 280px;
+}
+.te-floating-search i { color: var(--primary, #4f46e5); font-size: 16px; }
+.te-floating-search:hover { border-color: var(--primary, #4f46e5); }
+
+@media (max-width: 640px) {
+  .te-floating-search { min-width: 0; width: calc(100% - 32px); left: 16px; transform: none; top: 10px; }
+  .te-mega-menu { flex-direction: column; gap: 16px; }
+}
+
+/* ── Recent-search clear button ─────────────────────────────────────── */
+.te-search-clear {
+  margin-left: auto; background: none; border: none; color: var(--primary, #4f46e5);
+  font-size: 11px; font-weight: 700; cursor: pointer; text-transform: none; letter-spacing: 0;
+}
+.te-search-group-label { display: flex; align-items: center; }
+
+/* ── Notification bell + panel ──────────────────────────────────────── */
+.te-notif-dot {
+  position: absolute; top: 2px; right: 2px; min-width: 15px; height: 15px; padding: 0 3px;
+  border-radius: 999px; background: #ef4444; color: #fff; font-size: 9px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+.te-notif-backdrop { position: fixed; inset: 0; z-index: 590; }
+.te-notif-panel {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 600; width: 320px; max-height: 420px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  box-shadow: 0 20px 48px rgba(15,23,42,.16); overflow: hidden; display: flex; flex-direction: column;
+}
+.te-notif-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; font-size: 13.5px; font-weight: 700; color: var(--text); border-bottom: 1px solid var(--border); }
+.te-notif-head button { background: none; border: none; color: #4f46e5; font-size: 11.5px; font-weight: 700; cursor: pointer; }
+.te-notif-list { overflow-y: auto; }
+.te-notif-item { display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.te-notif-item:last-child { border-bottom: none; }
+.te-notif-icon { width: 30px; height: 30px; border-radius: 9px; background: rgba(79,70,229,.1); color: #4f46e5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.te-notif-title { font-size: 12.5px; font-weight: 700; color: var(--text); }
+.te-notif-body { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.te-notif-time { font-size: 10.5px; color: var(--muted); margin-top: 4px; }
+.te-notif-empty { padding: 30px 20px; text-align: center; font-size: 12.5px; color: var(--muted); }
+.te-notif-empty i { display: block; font-size: 26px; margin-bottom: 8px; opacity: .5; }

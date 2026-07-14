@@ -1,0 +1,43 @@
+.fb-draft-banner {
+  display: flex; align-items: center; gap: 8px; font-size: 12px; color: #f59e0b;
+  background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25);
+  border-radius: 10px; padding: 8px 12px; margin-bottom: 14px;
+}
+.fb-draft-banner button {
+  margin-left: auto; background: none; border: none; color: inherit; font-weight: 700;
+  cursor: pointer; text-decoration: underline; font-size: 12px;
+}
+
+.fb-message-label-row { display: flex; align-items: center; justify-content: space-between; }
+
+.fb-emoji-btn {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 8px;
+  padding: 3px 8px; cursor: pointer; font-size: 15px; line-height: 1;
+}
+.fb-emoji-popover {
+  position: absolute; right: 0; top: 30px; z-index: 20;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+  background: #14213d; border: 1px solid rgba(255,255,255,.14); border-radius: 12px;
+  padding: 8px; box-shadow: 0 12px 32px rgba(0,0,0,.4); width: 190px;
+}
+.fb-emoji-option { background: none; border: none; font-size: 18px; cursor: pointer; padding: 4px; border-radius: 6px; }
+.fb-emoji-option:hover { background: rgba(255,255,255,.08); }
+
+.fb-screenshot { margin-top: 10px; }
+.fb-screenshot-btn {
+  display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.05);
+  border: 1px dashed rgba(255,255,255,.2); border-radius: 10px; padding: 8px 14px;
+  color: rgba(255,255,255,.7); font-size: 12.5px; cursor: pointer;
+}
+.fb-screenshot-preview { position: relative; display: inline-block; }
+.fb-screenshot-preview img { max-width: 160px; max-height: 100px; border-radius: 10px; border: 1px solid rgba(255,255,255,.15); }
+.fb-screenshot-remove {
+  position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%;
+  background: #ef4444; color: #fff; border: none; cursor: pointer; font-size: 11px;
+}
+.fb-screenshot-note { font-size: 10.5px; color: rgba(255,255,255,.4); margin-top: 6px; }
+
+.fbc-inline-code {
+  background: rgba(148,163,184,.15); border-radius: 4px; padding: 1px 5px;
+  font-family: 'SF Mono', Menlo, monospace; font-size: 12px;
+}
