@@ -45,11 +45,8 @@ CORS(
                 # https://thinkeasy-react-git-feature-x-yourteam.vercel.app
                 # or https://thinkeasy-react-<hash>.vercel.app
                 re.compile(r"^https://thinkeasy-react(-[a-z0-9-]+)?\.vercel\.app$"),
-                # Legacy Netlify deploy (kept during the Vercel cutover —
-                # remove once nothing points at Netlify anymore)
+                # Legacy Netlify deploy (remove once nothing points at it)
                 "https://thinkeasy-1.netlify.app",
-                # Any Netlify deploy-preview / branch-deploy subdomain
-                # for this site, e.g. https://deploy-preview-12--thinkeasy-1.netlify.app
                 re.compile(r"^https://[a-z0-9-]+--thinkeasy-1\.netlify\.app$"),
                 # Local development
                 "http://localhost:3000",
