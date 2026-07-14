@@ -39,6 +39,14 @@ CORS(
     resources={
         r"/api/*": {
             "origins": [
+                # Production frontend (Vercel)
+                "https://thinkeasy-react.vercel.app",
+                # Any Vercel preview deploy for this same project, e.g.
+                # https://thinkeasy-react-git-feature-x-yourteam.vercel.app
+                # or https://thinkeasy-react-<hash>.vercel.app
+                re.compile(r"^https://thinkeasy-react(-[a-z0-9-]+)?\.vercel\.app$"),
+                # Legacy Netlify deploy (kept during the Vercel cutover —
+                # remove once nothing points at Netlify anymore)
                 "https://thinkeasy-1.netlify.app",
                 # Any Netlify deploy-preview / branch-deploy subdomain
                 # for this site, e.g. https://deploy-preview-12--thinkeasy-1.netlify.app
@@ -46,6 +54,8 @@ CORS(
                 # Local development
                 "http://localhost:3000",
                 "http://127.0.0.1:3000",
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
                 "http://localhost:5500",
                 "http://127.0.0.1:5500",
                 "http://localhost:8000",
@@ -3877,4 +3887,3 @@ backfill_visibility_flags()
 
 if __name__ == "__main__":
     app.run(debug=False)
-
