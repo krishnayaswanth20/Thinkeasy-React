@@ -1,4 +1,4 @@
-# ThinkEasy — React Migration (Home page reference implementation)
+# LeadIt — React Migration (Home page reference implementation)
 
 This is the first working slice of the React migration described in the
 migration plan: the full `src/` folder structure, plus a **complete,
@@ -223,7 +223,319 @@ scaffold (Dashboard, Categories, Businesses, Products, Import Wizard,
 Feedback, Settings) is a real, working page wired to the live backend,
 not a placeholder.
 
-## What's left overall
+## LeadIt v2.0 rebrand (this pass)
+
+Full rename from ThinkEasy → **LeadIt**, plus a new visual identity:
+
+- **Text rebrand**: every "Think Easy"/"ThinkEasy" occurrence replaced
+  across 24+ files (navbar, hero, footer, login, admin, meta tags, OG
+  tags, README/deployment docs, `package.json`). The two-tone logo text
+  (`Think`+`Easy`) became `Lead`+`It`. The real backend URL
+  (`thinkeasy-1-0.onrender.com`) was deliberately left alone — that's
+  live infrastructure, not branding, and renaming a Render service is a
+  separate, riskier operation than a text rebrand.
+- **New color theme**: `design-system.css`'s root tokens (light + dark
+  mode) replaced with the requested Business Intelligence palette —
+  `#0F766E` primary / `#14B8A6` secondary / `#22C55E` accent / slate
+  neutrals — plus a full sweep of every hardcoded old indigo/blue hex
+  and `rgba()` value across the admin, login, feedback, and detail-page
+  stylesheets from Phase 4, so nothing was left mismatched.
+- **Favicon + app icons**: generated programmatically with Pillow (no
+  external image tool) — a circular teal→emerald gradient, bold white
+  "L", and a small single-stroke growth arrow with a clean arrowhead
+  tucked into the corner. Produced at 16/32/180/192/512px plus a
+  multi-resolution `favicon.ico`, wired into `index.html` (`<link
+  rel="icon">`, `apple-touch-icon`, updated `theme-color`) and a new
+  `public/manifest.json`.
+- **One shared `LogoMark.jsx`** (SVG, matches the favicon exactly) now
+  used consistently in the Navbar, Login, Admin sidebar, Admin login,
+  Business Details, Product Details, and the homepage footer — replacing
+  six different one-off icon implementations that used to exist across
+  those pages.
+- Verified with `npm run build` (clean) and `npm test` (58/58 passing).
+  `Home.jsx` needed zero edits for any of this — the brand only ever
+  appeared in its child components (`Navbar`, `HeroSection`,
+  `StaticSections`), none of which were protected.
+
+### Not done yet from the LeadIt v2.0 brief
+
+This was a 15-section brief; this pass covered sections 1-4 (rebrand,
+theme, favicon, logo). Still open:
+- **Homepage/Business Details visual redesign** beyond the color swap
+  (new hero copy, additional cards/animations specifically called out
+  in sections 5-6)
+- **Admin panel table/pagination/filter improvements** (section 7)
+- **Bulk delete** with typed "DELETE" confirmation (section 8)
+- **"Delete Everything" danger zone** (section 9) — flagging again: this
+  needs a real backend wipe-all-tables endpoint that doesn't exist yet.
+  Building a fake UI for something this destructive isn't something to
+  rush through; it needs its own deliberate pass with explicit
+  confirmation once the backend side is actually ready.
+- **Excel upload audit** (section 10) — needs a dedicated pass through
+  the actual import endpoints and edge cases (rollback, large files),
+  not just a glance
+- **Full functionality/responsive/performance/bug audits** (sections
+  11-14) — each of these is really its own project; happy to tackle them
+  one at a time the same way Phase 3/4 got built incrementally
+
+## LeadIt v2.0 — Business/Product Details visual redesign (this pass)
+
+Covers section 5-6's remaining interactive-component asks, entirely via
+the shared `Sections.jsx` (imported by both `BusinessDetails.jsx` and
+`ProductDetails.jsx`) plus `detail-enhancements.css` — neither protected
+page file needed any edits this pass:
+
+- **Supplier cards** — replaced the data table with a responsive card
+  grid (avatar initial, location, type tag, rating bar), each card
+  animating in on scroll (Framer Motion `whileInView`) with a slight
+  stagger.
+- **Competitor comparison cards** — same treatment: threat-level tag,
+  market share / company size stats, hover lift.
+- **Expandable SWOT** — each quadrant now shows its first 2 points by
+  default with a "+N more" toggle; expanding/collapsing animates height
+  via `AnimatePresence`, rather than always dumping every item at once.
+- **Interactive Risks** — added severity filter chips (All/High/Medium/
+  Low, only shown when the data actually has more than one level) so a
+  long risk list isn't just a wall of text; filtered items animate in/out.
+- **Roadmap timeline** — each step now animates in on scroll instead of
+  rendering all at once (same horizontal-timeline layout as before, just
+  no longer static).
+- Verified with `npm run build` (clean — including catching and fixing a
+  stray CSS comment-parsing warning introduced along the way) and
+  `npm test` (58/58 passing).
+
+## LeadIt v2.0 — Bulk actions with typed confirmation (this pass)
+
+Section 8: checkbox multi-select added to Categories, Businesses, and
+Products (Feedback already had it from Phase 3) — select-all toggles
+everything on the *current page* (not every filtered result across
+pages, which would be surprising to act on blindly). A `BulkActionBar`
+appears above the table once anything's selected, offering Hide/Unhide
+(applied immediately — reversible) and Delete. Delete requires typing
+the literal word **DELETE** into a `ConfirmTypedModal` before the button
+even enables — no accidental-click path to a destructive bulk action.
+Feedback's existing bulk-delete confirm was upgraded to the same typed
+modal for consistency across all four tables. All four call the real
+`/api/{categories,businesses,products,feedback}/bulk` endpoints
+(`{ ids, action }` → `{ ok, errors }`), which already supported
+hide/unhide/delete server-side — no backend changes needed. Verified
+with `npm run build` (clean) and `npm test` (62/62 passing). No
+protected files touched.
+
+
+
+Section 7's "better pagination" ask — a reusable `hooks/usePagination.js`
+(with unit tests) + `components/Admin/Pagination.jsx` control (page
+numbers with ellipsis for long runs, page-size selector, first/prev/
+next/last), wired into all four admin list views: Categories,
+Businesses, Products, and Feedback. Search/filters in each of those were
+already built in Phase 3 — this just adds a proper page control under
+each table instead of dumping every matching row at once. Feedback's
+existing "select all across all matching filters" bulk-select behavior
+was left as-is (still correct — pagination only changed what's rendered
+per screen, not what "select all" means). Verified with `npm run build`
+(clean) and `npm test` (62/62 passing, 4 new tests for the pagination
+hook itself). No protected files touched — this was entirely within
+`src/pages/admin/`.
+
+### Still open from the LeadIt v2.0 brief
+
+- **Delete Everything** (section 9) — still blocked on a real backend
+  endpoint + your explicit confirmation
+- **Backend restructuring** (Phase 5, backend half) — up next
+
+## LeadIt v2.0 — Phase 5, React cleanup (this pass)
+
+A note first: this session's sandbox reset between turns (the working
+directory is ephemeral scratch space, separate from the files you
+actually have), so this pass started by restoring the project from the
+last zip delivered in this conversation and re-verifying it was byte-
+identical to before the reset — it was, confirmed via checksum on all
+three protected files plus a full lint/build/test pass.
+
+Actual cleanup findings (verified, not guessed):
+- **9 completely empty directories removed** —
+  `components/{Charts,Inputs,Search,MegaMenu}` and
+  `pages/{About,AIAdvisor,Businesses,Products,MarketInsights}` — leftover
+  from the very first Phase 1 scaffold (dated back to the initial
+  migration), never used since: the real `MegaMenu` lives in
+  `components/Navbar/MegaMenu.jsx`, and the `/about`, `/ai-advisor`,
+  `/market-insights` routes render `ComingSoon` inline rather than a
+  dedicated page file. Confirmed dead by checking every route/import in
+  `App.jsx` before deleting, and confirmed build/tests were unaffected
+  after.
+- **Dead CSS removed**: `.nav-logo-mark .bar/.b1/.b2/.b3` in `home.css` —
+  orphaned when the footer logo was swapped to the shared `LogoMark` SVG
+  component a few passes back, never cleaned up at the time.
+- **Verified, not found wanting**: every production dependency in
+  `package.json` (axios, chart.js, framer-motion, react, react-dom,
+  react-helmet-async, react-hook-form, react-router-dom) is genuinely
+  used somewhere in `src/` — none are dead weight.
+- `src/pages/admin/*` subfolders were checked too — all contain real,
+  used files, so nothing removed there.
+
+Verified with `npm run lint` (clean), `npm run build` (clean), and
+`npm test` (69/69 passing) after every change, and confirmed zero
+behavioral difference (bundle output identical in structure, only
+content hashes changed since filenames include a build hash).
+
+## LeadIt v2.0 — Product Details Market Insights (this pass)
+
+Section 6 asked for "Market insights", "Price trends", and "Demand
+trends". Before building anything, I checked the actual backend schema
+(`app.py`) for price or demand fields — **there are none, anywhere**.
+Businesses and products only ever track `market_size`, `growth_rate`,
+`investment`/`min`/`max_investment`, and `profit_margin` — no price
+history, no demand index, nothing time-series about either.
+
+Rather than fabricate charts from numbers that don't exist, this pass
+built **Market Insights** as something genuinely computable from real
+data: a new `components/DetailPage/MarketInsights.jsx` panel that
+compares this product against its actual category peers (reusing the
+same businesses+products cache the Navbar's search already warms) —
+growth rate vs. category average, market-size percentile, and entry-cost
+percentile, all computed live, all real numbers. It correctly shows an
+honest "not enough data yet" state when a category has fewer than 2
+comparable listings instead of dividing by zero or showing nonsense.
+
+**Price Trends and Demand Trends are not built**, and won't be until the
+backend actually tracks that data — the frontend has nothing to render.
+Verified with `npm run lint` (clean), `npm run build` (clean), and
+`npm test` (69/69 passing). Only `ProductDetails.jsx` was touched, via
+the same small disclosed pattern as previous passes (import + one new
+`<Section>` block, nothing else in the file changed).
+
+## LeadIt v2.0 — Functionality/Responsive/Performance/Bug audit (this pass)
+
+Sections 11-14 asked for a real audit, not a glance, so this pass added
+actual tooling rather than eyeballing the code: **ESLint is now part of
+the project** (`npm run lint`) with `eslint-plugin-react` +
+`eslint-plugin-react-hooks`, configured to catch real bugs (unused vars,
+missing/incorrect hook dependencies) rather than pure style noise
+(`react/no-unescaped-entities` — apostrophes in JSX text — was turned
+off since React renders those fine; flagging them isn't a bug, just
+churn).
+
+**Bugs found and fixed:**
+- **A real, subtle bug in my own earlier work**: five places
+  (`SourcesSchemesManager`, and the mount-effects in `AdminBusinesses`/
+  `AdminCategories`/`AdminFeedback`/`AdminProducts`) had an
+  `eslint-disable-next-line` comment placed *inline on the same line* as
+  the code it was meant to suppress, rather than on its own line above —
+  so it silently disabled nothing, and the underlying
+  `react-hooks/exhaustive-deps` warning was just never actually checked.
+  `SourcesSchemesManager`'s `loadAll` is now a proper `useCallback` with
+  correct dependencies (the technically-correct fix); the four admin
+  list pages got the disable comment moved to where it actually works,
+  since their "run once on mount" / "run on filter change" intent was
+  already correct, just unverified.
+- Dead `refreshTick` prop on `BookmarkButton` (never read, never passed
+  by any caller — safe to remove entirely).
+- Unnecessary regex escape in `RepeatableRows.jsx` (harmless but flagged;
+  cleaned up).
+- The `screenshot` state in `FeedbackForm` was flagged as unused — it's
+  intentionally captured for the local preview only (no backend
+  attachment endpoint to send it to, per the earlier honest disclosure)
+  but renamed and commented so it's clear that's deliberate, not an
+  oversight, for the next person reading it.
+
+**Performance finding, fixed**: `AnalyticsCharts.jsx` imported
+`chart.js/auto`, which registers *every* chart type, scale, and plugin
+Chart.js has, even though this app only ever renders line/doughnut/bar
+charts. Switched to explicit tree-shaken imports registering only what's
+used — the shared chart chunk dropped from 234.68KB to 200.42KB
+(~15% smaller, ~10KB less gzipped over the wire). Chart.js's core
+architecture has a real floor even minimally registered, so this is a
+modest, honest improvement, not a dramatic one.
+
+**Verified, not just assumed:**
+- Zero orphaned/unimported component files (checked every `.jsx` file
+  has at least one importer; `main.jsx` correctly flagged as a false
+  positive since it's the entry point Vite loads directly, not
+  JS-imported).
+- Zero `console.log`/`console.debug`/`TODO`/`FIXME` leftovers anywhere
+  in `src/`.
+- Responsive coverage: most custom stylesheets have explicit `@media`
+  breakpoints; the ones that don't (`login.css`, `ui-kit.css`) were
+  checked individually and use fluid units (`width: 100%; max-width:
+  400px`, flex-wrap) that don't need breakpoints to behave correctly on
+  mobile — confirmed rather than assumed.
+
+Verified with `npm run lint` (0 problems), `npm run build` (clean), and
+`npm test` (69/69 passing) after every fix. No protected files touched
+— everything here was either shared components/hooks or admin pages.
+
+## LeadIt v2.0 — Interactive KPI cards (this pass)
+
+Section 5's "Interactive KPI cards" for Business Details: new
+`components/DetailPage/AnimatedMetric.jsx` — parses a formatted value
+like `"₹5.00 Cr"` or `"25%"` into prefix/number/decimals/suffix, and
+counts the numeric part up from 0 when it scrolls into view (Framer
+Motion `animate()` + `useInView`, once per page load), while the
+currency symbol / `%` / unit stays put. Non-numeric values (`"—"`,
+`"Not Available"`) fall back to rendering unanimated rather than
+breaking. The four hero metric cards on Business Details now use this
+via a shared `KpiCard` component (icon, hover lift, scroll-in fade)
+instead of static divs — a small, disclosed edit to
+`BusinessDetails.jsx` (swapped the metrics-row block, nothing else
+touched).
+
+**Product Details deliberately did not get this treatment** — checked
+first, and the original legacy `product-details.html` never had a
+metrics-row/KPI-card hero at all, only a plain financials table; the
+v2.0 brief's KPI-card line item was specific to Business Details
+(section 5), so `ProductDetails.jsx` needed zero edits here.
+
+Verified with `npm run build` (clean) and `npm test` (69/69 passing, 5
+new tests for the value-parsing logic).
+
+## LeadIt v2.0 — Excel upload audit (this pass)
+
+Section 10 asked for a genuine audit, not just a glance, so here's what
+I actually verified by reading the backend's import code
+(`/api/import/{categories,businesses,products}/{template,preview}` and
+the commit endpoints), not assumed:
+
+**Already correct, verified against the real backend responses:**
+- Validation and duplicate detection — the preview endpoint classifies
+  every row as `valid`/`duplicate`/`invalid` server-side (checked against
+  both the DB and repeats within the same file); the wizard already
+  displayed this correctly.
+- Preview before import — dry-run endpoint, no data written; confirmed
+  the wizard's counts reflect the *whole file* even though only the
+  first 20 rows are shown in detail (that's a backend-imposed display
+  cap, not a wizard bug).
+- Import report — the commit response includes **every** row's outcome
+  (not capped at 20 like the preview), confirmed by reading the actual
+  loop in `import_categories`/`import_businesses`/`import_products`.
+
+**Two things worth knowing that don't work the way "audit" checklists
+often assume, corrected here rather than glossed over:**
+- **"Rollback" is per-row, not whole-file.** Each row commits to the
+  database independently — if row 47 fails, rows 1-46 already succeeded
+  and stay committed; there's no all-or-nothing transaction across the
+  whole import. This is arguably the right design for bulk imports (one
+  bad row shouldn't void 500 good ones), but it's not "rollback" in the
+  usual sense, so the wizard now says so explicitly right above the
+  Confirm Import button instead of leaving it ambiguous.
+- **No large-file protection exists server-side** — no
+  `MAX_CONTENT_LENGTH`, no streaming/chunked parsing; the whole file is
+  read into memory via pandas. Added a client-side warning (not a hard
+  block, since there's no real backend limit to enforce against) when a
+  selected file exceeds 15MB.
+
+**Genuinely new, not previously built:**
+- **Upload progress bars** for both the preview and the actual import
+  step, via axios `onUploadProgress` — previously the wizard just showed
+  a spinner with no sense of progress on a large file.
+- **Export Failed Rows** button on the completed-import card, which
+  generates a CSV client-side from the full (uncapped) result rows —
+  new `utils/csvExport.js`, with its own unit tests.
+
+Verified with `npm run build` (clean) and `npm test` (64/64 passing, 2
+new tests for the CSV export helper). No backend or protected files
+touched.
+
 
 Everything from the original migration brief is done, including an
 automated test suite:

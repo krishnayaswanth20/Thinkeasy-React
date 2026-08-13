@@ -1,4 +1,4 @@
-# Deploying ThinkEasy React
+# Deploying LeadIt React
 
 This is a static single-page app (Vite build output) that talks to the
 existing Flask API — there's nothing server-side to deploy here besides
